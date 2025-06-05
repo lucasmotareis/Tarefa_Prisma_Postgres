@@ -3,7 +3,6 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -11,5 +10,63 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://neondb_owner:npg_xJe4woWrC8nq@ep-frosty-union-a83htjuy-pooler.eastus2.azure.neon.tech/neondb?sslmode=require"
+}
+
+model Cafe {
+  id           Int           @id @default(autoincrement())
+  nome         String
+  tipo         String
+  precoUnitario Float
+  descricao    String
+  tags         String[] // Lista de palavras-chave
+  itensPedido  ItemPedido[]  // Relacionamento com Itens do Pedido
+}
+
+model Pedido {
+  id           Int           @id @default(autoincrement())
+  clienteId    Int
+  dataPedido   DateTime      @default(now())
+  totalPedido  Float
+  entrega      Entrega?
+  itens        ItemPedido[]
+  cliente      Cliente       @relation(fields: [clienteId], references: [id])
+}
+
+model ItemPedido {
+  id         Int     @id @default(autoincrement())
+  cafeId     Int
+  pedidoId   Int
+  quantidade Int
+  precoUnitario Float
+
+  cafe     Cafe   @relation(fields: [cafeId], references: [id])
+  pedido   Pedido @relation(fields: [pedidoId], references: [id])
+
+  @@unique([cafeId, pedidoId]) // Evita duplicação do mesmo café no mesmo pedido
+}
+
+model Entrega {
+  id                  Int      @id @default(autoincrement())
+  endereco            String
+  status              StatusEntrega
+  dataPrevistaEntrega DateTime
+  pedidoId            Int      @unique
+
+  pedido              Pedido   @relation(fields: [pedidoId], references: [id])
+}
+
+model Cliente {
+  id       Int      @id @default(autoincrement())
+  nome     String
+  email    String   @unique
+  cpf      String   @unique
+  telefone String
+  pedidos  Pedido[]
+}
+
+enum StatusEntrega {
+  PENDENTE
+  EM_TRANSITO
+  ENTREGUE
 }
