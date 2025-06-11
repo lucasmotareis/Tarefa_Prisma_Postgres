@@ -35,12 +35,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.8.2
- * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
+ * Prisma Client JS version: 6.9.0
+ * Query Engine version: 81e4af48011447c3cc503a190e86995b66d2a28e
  */
 Prisma.prismaVersion = {
-  client: "6.8.2",
-  engine: "2060c79ba17c6bb9f5823312b6f6b7f4a845738e"
+  client: "6.9.0",
+  engine: "81e4af48011447c3cc503a190e86995b66d2a28e"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -186,12 +186,13 @@ const config = {
     "rootEnvPath": null
   },
   "relativePath": "../../prisma",
-  "clientVersion": "6.8.2",
-  "engineVersion": "2060c79ba17c6bb9f5823312b6f6b7f4a845738e",
+  "clientVersion": "6.9.0",
+  "engineVersion": "81e4af48011447c3cc503a190e86995b66d2a28e",
   "datasourceNames": [
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -200,8 +201,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://neondb_owner:npg_xJe4woWrC8nq@ep-frosty-union-a83htjuy-pooler.eastus2.azure.neon.tech/neondb?sslmode=require\"\n}\n\nmodel Cafe {\n  id            Int          @id @default(autoincrement())\n  nome          String\n  tipo          String\n  precoUnitario Float\n  descricao     String\n  tags          String[] // Lista de palavras-chave\n  itensPedido   ItemPedido[] // Relacionamento com Itens do Pedido\n}\n\nmodel Pedido {\n  id          Int          @id @default(autoincrement())\n  clienteId   Int\n  dataPedido  DateTime     @default(now())\n  totalPedido Float\n  entrega     Entrega?\n  itens       ItemPedido[]\n  cliente     Cliente      @relation(fields: [clienteId], references: [id])\n}\n\nmodel ItemPedido {\n  id            Int   @id @default(autoincrement())\n  cafeId        Int\n  pedidoId      Int\n  quantidade    Int\n  precoUnitario Float\n\n  cafe   Cafe   @relation(fields: [cafeId], references: [id])\n  pedido Pedido @relation(fields: [pedidoId], references: [id])\n\n  @@unique([cafeId, pedidoId]) // Evita duplicação do mesmo café no mesmo pedido\n}\n\nmodel Entrega {\n  id                  Int           @id @default(autoincrement())\n  endereco            String\n  status              StatusEntrega\n  dataPrevistaEntrega DateTime\n  pedidoId            Int           @unique\n\n  pedido Pedido @relation(fields: [pedidoId], references: [id])\n}\n\nmodel Cliente {\n  id       Int      @id @default(autoincrement())\n  nome     String\n  email    String   @unique\n  cpf      String   @unique\n  telefone String\n  pedidos  Pedido[]\n}\n\nenum StatusEntrega {\n  PENDENTE\n  EM_TRANSITO\n  ENTREGUE\n}\n",
-  "inlineSchemaHash": "63c681753ad2d6bf199e962eb7b4f9cbb9e9a01b36e248456737f974159b07a0",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://neondb_owner:npg_xJe4woWrC8nq@ep-frosty-union-a83htjuy-pooler.eastus2.azure.neon.tech/neondb?sslmode=require\"\n}\n\nmodel Cafe {\n  id            Int          @id @default(autoincrement())\n  nome          String\n  tipo          String\n  precoUnitario Float\n  descricao     String\n  tags          String[] // Lista de palavras-chave\n  itensPedido   ItemPedido[] // Relacionamento com Itens do Pedido\n}\n\nmodel Pedido {\n  id          Int          @id @default(autoincrement())\n  clienteId   Int\n  dataPedido  DateTime     @default(now())\n  totalPedido Float\n  entrega     Entrega?\n  itens       ItemPedido[]\n  cliente     Cliente      @relation(fields: [clienteId], references: [id])\n}\n\nmodel ItemPedido {\n  id            Int   @id @default(autoincrement())\n  cafeId        Int\n  pedidoId      Int\n  quantidade    Int\n  precoUnitario Float\n\n  cafe   Cafe   @relation(fields: [cafeId], references: [id])\n  pedido Pedido @relation(fields: [pedidoId], references: [id])\n\n  @@unique([cafeId, pedidoId]) // Evita duplicação do mesmo café no mesmo pedido\n}\n\nmodel Entrega {\n  id                  Int           @id @default(autoincrement())\n  endereco            String\n  status              StatusEntrega\n  dataPrevistaEntrega DateTime\n  pedidoId            Int           @unique\n\n  pedido Pedido @relation(fields: [pedidoId], references: [id])\n}\n\nmodel Cliente {\n  id       Int      @id @default(autoincrement())\n  nome     String\n  email    String   @unique\n  cpf      String   @unique\n  telefone String\n  pedidos  Pedido[]\n}\n\nenum StatusEntrega {\n  PENDENTE\n  EM_TRANSITO\n  ENTREGUE\n}\n",
+  "inlineSchemaHash": "1c388fae2975f5f9ba36a209bcb7076c184be6797ffc3b3b444cd42f3988a3cf",
   "copyEngine": true
 }
 config.dirname = '/'

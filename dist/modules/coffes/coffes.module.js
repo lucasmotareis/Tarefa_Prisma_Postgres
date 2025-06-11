@@ -10,14 +10,16 @@ exports.CoffesModule = void 0;
 const common_1 = require("@nestjs/common");
 const coffes_service_1 = require("./coffes.service");
 const coffes_controller_1 = require("./coffes.controller");
+const prisma_service_1 = require("../../prisma/prisma.service");
+const prisma_module_1 = require("../../prisma/prisma.module");
 let CoffesModule = class CoffesModule {
 };
 exports.CoffesModule = CoffesModule;
 exports.CoffesModule = CoffesModule = __decorate([
     (0, common_1.Module)({
-        imports: [],
+        imports: [prisma_module_1.PrismaModule],
         controllers: [coffes_controller_1.CoffesController],
-        providers: [coffes_service_1.CoffesService]
+        providers: [coffes_service_1.CoffesService, prisma_service_1.PrismaService]
     })
 ], CoffesModule);
 //# sourceMappingURL=coffes.module.js.map
